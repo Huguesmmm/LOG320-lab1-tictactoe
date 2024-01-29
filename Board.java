@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 // IMPORTANT: Il ne faut pas changer la signature des méthodes
 // de cette classe, ni le nom de la classe.
-// Vous pouvez par contre ajouter d'autres méthodes (ça devrait 
+// Vous pouvez par contre ajouter d'autres méthodes (ça devrait
 // être le cas)
 class Board {
     private Mark[][] board;
@@ -26,6 +26,7 @@ class Board {
         board[m.getRow()][m.getCol()] = mark;
 
     }
+
 
     // retourne 100 pour une victoire
     // -100 pour une défaite
@@ -122,6 +123,16 @@ class Board {
         }
 
         return score;
+    }
+
+    //Board Getter
+    public Mark[][] getBoard() {
+        return board;
+    }
+
+    //Check if position is empty in the specific posistion of the board
+    public boolean isEmpty(int row, int col) {
+        return board[row][col] == Mark.EMPTY;
     }
 
 }

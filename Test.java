@@ -14,6 +14,7 @@ public class Test {
         // board1.play(new Move(2, 1), Mark.O);
         // board1.play(new Move(2, 2), Mark.X);
 
+
         // return 0
         // board1.play(new Move(0, 0), Mark.X);
         // board1.play(new Move(0, 1), Mark.O);

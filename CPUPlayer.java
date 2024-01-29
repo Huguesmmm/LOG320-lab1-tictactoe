@@ -29,7 +29,9 @@ class CPUPlayer
     // ont le même score.
     public ArrayList<Move> getNextMoveMinMax(Board board)
     {
+
         numExploredNodes = 0;
+        return new ArrayList<Move>();
 
     }
 
@@ -38,7 +40,23 @@ class CPUPlayer
     // ont le même score.
     public ArrayList<Move> getNextMoveAB(Board board){
         numExploredNodes = 0;
+        return new ArrayList<Move>();
 
+    }
+
+
+    //Checks all the moves available on the board if the cell is empty
+    public ArrayList<Move> generateMoves(Board board) {
+        ArrayList<Move> moves = new ArrayList<>();
+        // Iterate through the board to find empty cells
+        for (int row = 0; row < board.getBoard().length; row++) {
+            for (int col = 0; col < board.getBoard().length; col++) {
+                if (board.isEmpty(row, col)) {
+                    moves.add(new Move(row, col));
+                }
+            }
+        }
+        return moves;
     }
 
 }
