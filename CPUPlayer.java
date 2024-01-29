@@ -13,6 +13,7 @@ class CPUPlayer
     // au début de votre MinMax ou Alpha Beta.
     private int numExploredNodes;
 
+
     // Le constructeur reçoit en paramètre le
     // joueur MAX (X ou O)
     public CPUPlayer(Mark cpu){
@@ -29,10 +30,9 @@ class CPUPlayer
     // ont le même score.
     public ArrayList<Move> getNextMoveMinMax(Board board)
     {
-
         numExploredNodes = 0;
-        return new ArrayList<Move>();
 
+        return new ArrayList<Move>();
     }
 
     // Retourne la liste des coups possibles.  Cette liste contient
@@ -40,23 +40,33 @@ class CPUPlayer
     // ont le même score.
     public ArrayList<Move> getNextMoveAB(Board board){
         numExploredNodes = 0;
+
         return new ArrayList<Move>();
 
     }
 
 
+
     //Checks all the moves available on the board if the cell is empty
-    public ArrayList<Move> generateMoves(Board board) {
+    public ArrayList<Move> MovesAvailable(Board board) {
         ArrayList<Move> moves = new ArrayList<>();
+        Move MoveToPlay;
         // Iterate through the board to find empty cells
         for (int row = 0; row < board.getBoard().length; row++) {
             for (int col = 0; col < board.getBoard().length; col++) {
                 if (board.isEmpty(row, col)) {
-                    moves.add(new Move(row, col));
+                    moves.add(MoveToPlay = new Move(row, col));
+                    System.out.println("Row " + MoveToPlay.getCol()+ " col "+ MoveToPlay.getCol());
                 }
             }
         }
         return moves;
     }
+
+
+
+
+
+
 
 }

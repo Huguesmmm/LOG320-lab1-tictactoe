@@ -130,9 +130,12 @@ class Board {
         return board;
     }
 
-    //Check if position is empty in the specific posistion of the board
+    //Check if position is empty in the specific position of the board
     public boolean isEmpty(int row, int col) {
+
         return board[row][col] == Mark.EMPTY;
     }
+
+
 
 }
