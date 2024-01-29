@@ -15,7 +15,7 @@ class Board {
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
-                board[i][j] = Mark.EMPTY;
+                board[i][j] = Mark.E;
             }
         }
 
@@ -31,13 +31,27 @@ class Board {
         return emptyMoves;
     }
 
+    public Mark[][] getBoard() {
+        return board;
+    }
+
     // Place la pièce 'mark' sur le plateau, à la
     // position spécifiée dans Move
     //
     // Ne pas changer la signature de cette méthode
     public void play(Move m, Mark mark) {
         board[m.getRow()][m.getCol()] = mark;
-        emptyMoves.remove(m);
+        for (Move move : this.emptyMoves) {
+            if(move.getRow() == m.getRow() && move.getCol() == m.getCol()) {
+                this.emptyMoves.remove(move);
+                break;
+            }
+        }
+    }
+
+    public void undo(Move m) {
+        board[m.getRow()][m.getCol()] = Mark.E;
+        this.emptyMoves.add(m);
     }
 
     // retourne 100 pour une victoire

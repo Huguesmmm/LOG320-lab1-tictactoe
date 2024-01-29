@@ -51,40 +51,68 @@ class CPUPlayer
     // Retourne la liste des coups possibles.  Cette liste contient
     // plusieurs coups possibles si et seuleument si plusieurs coups
     // ont le même score.
-    public ArrayList<Move> getNextMoveAB(Board board){
-        numExploredNodes = 0;
+    // public ArrayList<Move> getNextMoveAB(Board board){
+    //     numExploredNodes = 0;
+    // }
 
-    }
+    private int minmax(Board board, Mark mark){
 
-    private int minmax(Board board, Mark max){
-
-        if(board.evaluate(max) == Mark.isWinning()){
-            return Mark.isWinning();
+        // retourne l'inverse à cause de la récursion appelle l'opposé
+        if(board.evaluate(mark) == Mark.isWinning()){
+            return Mark.isLosing();
         }
 
-        if(board.evaluate(max) == Mark.isLosing()){
-            return Mark.isLosing();
+        if(board.evaluate(mark) == Mark.isLosing()){
+            return Mark.isWinning();
         }
 
         if(board.getEmptyMoves().isEmpty()){
             return Mark.isDraw();
         }
 
-        if(max == maxMark){
+        if(mark == maxMark){
             int maxEval = -1000;
             for(int i = 0; i < board.getEmptyMoves().size(); i++){
-                int eval = minmax(board, max.opposite());
+                Move moveMax = board.getEmptyMoves().get(i);
+                board.play(moveMax, mark);
+                printTicTacToeGame(board.getBoard());
+                int eval = minmax(board, mark.opposite());
+                board.undo(moveMax);
                 maxEval = Math.max(maxEval, eval);
             }
             return maxEval;
         } else {
             int minEval = 1000;
             for(int i = 0; i < board.getEmptyMoves().size(); i++){
-                int eval = minmax(board, max.opposite());
+                Move moveMin = board.getEmptyMoves().get(i);
+                board.play(board.getEmptyMoves().get(i), mark);
+                printTicTacToeGame(board.getBoard());
+                int eval = minmax(board, mark.opposite());
+                board.undo(moveMin);
                 minEval = Math.min(minEval, eval);
             }
             return minEval;
         }
     }
+
+    public static void printTicTacToeGame(Mark[][] gameBoard) {
+        System.out.println("[");
+
+        for (int i = 0; i < gameBoard.length; i++) {
+            System.out.print("  [ ");
+            for (int j = 0; j < gameBoard[i].length; j++) {
+                System.out.print(gameBoard[i][j] + " ");
+            }
+            System.out.println("]");
+        }
+
+        System.out.println("]");
+    }
+
+    // public String toString(Board board){
+
+    //     this.getNextMoveMinMax(board) = 
+    //     return "";
+    // }
 
 }

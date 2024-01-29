@@ -2,10 +2,10 @@
 enum Mark{
         X,
         O,
-        EMPTY;
+        E;
 
         public boolean isEmpty(){
-            return this == EMPTY;
+            return this == E;
         }
 
         public boolean isX(){
@@ -22,7 +22,7 @@ enum Mark{
             } else if (this == O){
                 return X;
             } else {
-                return EMPTY;
+                return E;
             }
         }
 
