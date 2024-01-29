@@ -25,6 +25,18 @@ enum Mark{
                 return EMPTY;
             }
         }
+
+        public static int isWinning() {
+            return 100;
+        }
+
+        public static int isLosing() {
+            return -100;
+        }
+
+        public static int isDraw() {
+            return 0;
+        }
     }
 
     
