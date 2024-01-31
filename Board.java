@@ -1,5 +1,5 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 // IMPORTANT: Il ne faut pas changer la signature des méthodes
 // de cette classe, ni le nom de la classe.
@@ -8,6 +8,7 @@ import java.util.ArrayList;
 class Board {
     private Mark[][] board;
     private ArrayList<Move> emptyMoves = new ArrayList<Move>();
+    private HashMap<String, Move> emptyMoveMap = new HashMap<String, Move>();
 
     // Ne pas changer la signature de cette méthode
     public Board() {
@@ -16,19 +17,18 @@ class Board {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 board[i][j] = Mark.E;
-            }
-        }
-
-        // initialiser la liste des coups vides
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length ; j++) {
-                emptyMoves.add(new Move(i, j));
+                Move move = new Move(i, j);
+                emptyMoveMap.put(moveKey(move), move);
             }
         }
     }
 
     public ArrayList<Move> getEmptyMoves() {
         return emptyMoves;
+    }
+
+    public HashMap<String, Move> getEmptyMoveMap() {
+        return emptyMoveMap;
     }
 
     public Mark[][] getBoard() {
@@ -41,17 +41,24 @@ class Board {
     // Ne pas changer la signature de cette méthode
     public void play(Move m, Mark mark) {
         board[m.getRow()][m.getCol()] = mark;
-        for (Move move : this.emptyMoves) {
-            if(move.getRow() == m.getRow() && move.getCol() == m.getCol()) {
-                this.emptyMoves.remove(move);
-                break;
-            }
-        }
+        emptyMoveMap.remove(moveKey(m));
     }
 
     public void undo(Move m) {
         board[m.getRow()][m.getCol()] = Mark.E;
-        this.emptyMoves.add(m);
+        emptyMoveMap.put(moveKey(m), m);
+    }
+
+    public void playMinMax(Move m, Mark mark) {
+        board[m.getRow()][m.getCol()] = mark;
+    }
+
+    public void undoMinMax(Move m) {
+        board[m.getRow()][m.getCol()] = Mark.E;
+    }
+
+    public String moveKey(Move m) {
+        return m.getRow() + "," + m.getCol();
     }
 
     // retourne 100 pour une victoire
