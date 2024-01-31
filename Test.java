@@ -51,8 +51,6 @@ public class Test {
         // board1.play(new Move(2, 0), Mark.O);
 
         // printTicTacToeGame(board1.getBoard());
-        
-
         for (int i = 0; i < cpu1.getNextMoveMinMax(board1).size(); i++) {
             System.out.println(cpu1.getNextMoveMinMax(board1).get(i));
         }

@@ -5,7 +5,7 @@ import java.util.HashMap;
 // de cette classe, ni le nom de la classe.
 // Vous pouvez par contre ajouter d'autres méthodes (ça devrait
 // être le cas)
-class Board {
+public class Board {
     private Mark[][] board;
     private ArrayList<Move> emptyMoves = new ArrayList<Move>();
     private HashMap<String, Move> emptyMoveMap = new HashMap<String, Move>();
@@ -159,16 +159,6 @@ class Board {
         return score;
     }
 
-    //Board Getter
-    public Mark[][] getBoard() {
-        return board;
-    }
-
-    //Check if position is empty in the specific position of the board
-    public boolean isEmpty(int row, int col) {
-
-        return board[row][col] == Mark.EMPTY;
-    }
 
 
 

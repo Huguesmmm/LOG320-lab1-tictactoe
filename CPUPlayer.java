@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 // de cette classe, ni le nom de la classe.
 // Vous pouvez par contre ajouter d'autres méthodes (ça devrait 
 // être le cas)
-class CPUPlayer {
+public class CPUPlayer {
 
     // Contient le nombre de noeuds visités (le nombre
     // d'appel à la fonction MinMax ou Alpha Beta)
@@ -54,9 +54,19 @@ class CPUPlayer {
     // Retourne la liste des coups possibles. Cette liste contient
     // plusieurs coups possibles si et seuleument si plusieurs coups
     // ont le même score.
-    // public ArrayList<Move> getNextMoveAB(Board board){
-    // numExploredNodes = 0;
-    // }
+
+
+
+     public ArrayList<Move> getNextMoveAB(Board board){
+
+
+        ArrayList<Move> moves = new ArrayList<Move>();
+
+
+     return moves;
+     }
+
+
 
     private int minmax(Board board, Mark mark) {
 

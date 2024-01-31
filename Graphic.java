@@ -35,7 +35,7 @@ public class Graphic {
         for (int i = 0; i < buttons.length; i++) {
             for (int j = 0; j < buttons.length; j++) {
                 buttons[i][j] = new JButton();
-                buttons[i][j].addActionListener(new ButtonListener(i, j));
+             //   buttons[i][j].addActionListener(new ButtonListener(i, j));
                 panel.add(buttons[i][j]);
             }
         }
