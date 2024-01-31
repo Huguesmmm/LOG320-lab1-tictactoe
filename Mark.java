@@ -2,10 +2,10 @@
 enum Mark{
         X,
         O,
-        EMPTY;
+        E;
 
         public boolean isEmpty(){
-            return this == EMPTY;
+            return this == E;
         }
 
         public boolean isX(){
@@ -22,8 +22,20 @@ enum Mark{
             } else if (this == O){
                 return X;
             } else {
-                return EMPTY;
+                return E;
             }
+        }
+
+        public static int isWinning() {
+            return 100;
+        }
+
+        public static int isLosing() {
+            return -100;
+        }
+
+        public static int isDraw() {
+            return 0;
         }
     }
 

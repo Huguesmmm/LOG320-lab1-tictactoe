@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 // IMPORTANT: Il ne faut pas changer la signature des méthodes
 // de cette classe, ni le nom de la classe.
@@ -6,6 +7,8 @@ import java.util.ArrayList;
 // être le cas)
 class Board {
     private Mark[][] board;
+    private ArrayList<Move> emptyMoves = new ArrayList<Move>();
+    private HashMap<String, Move> emptyMoveMap = new HashMap<String, Move>();
 
     // Ne pas changer la signature de cette méthode
     public Board() {
@@ -13,9 +16,23 @@ class Board {
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
-                board[i][j] = Mark.EMPTY;
+                board[i][j] = Mark.E;
+                Move move = new Move(i, j);
+                emptyMoveMap.put(moveKey(move), move);
             }
         }
+    }
+
+    public ArrayList<Move> getEmptyMoves() {
+        return emptyMoves;
+    }
+
+    public HashMap<String, Move> getEmptyMoveMap() {
+        return emptyMoveMap;
+    }
+
+    public Mark[][] getBoard() {
+        return board;
     }
 
     // Place la pièce 'mark' sur le plateau, à la
@@ -24,7 +41,24 @@ class Board {
     // Ne pas changer la signature de cette méthode
     public void play(Move m, Mark mark) {
         board[m.getRow()][m.getCol()] = mark;
+        emptyMoveMap.remove(moveKey(m));
+    }
 
+    public void undo(Move m) {
+        board[m.getRow()][m.getCol()] = Mark.E;
+        emptyMoveMap.put(moveKey(m), m);
+    }
+
+    public void playMinMax(Move m, Mark mark) {
+        board[m.getRow()][m.getCol()] = mark;
+    }
+
+    public void undoMinMax(Move m) {
+        board[m.getRow()][m.getCol()] = Mark.E;
+    }
+
+    public String moveKey(Move m) {
+        return m.getRow() + "," + m.getCol();
     }
 
 
@@ -40,13 +74,13 @@ class Board {
         }
 
         for (int i = 0; i < board.length; i++) {
-            if (evaluateRows(mark, i) != 0)
+            if (evaluateRows(mark, i) != Mark.isDraw())
                 return evaluateRows(mark, i);
 
-            if (evaluateCols(mark, i) != 0)
+            if (evaluateCols(mark, i) != Mark.isDraw())
                 return evaluateCols(mark, i);
 
-            if (evaluateDiags(mark) != 0)
+            if (evaluateDiags(mark) != Mark.isDraw())
                 return evaluateDiags(mark);
         }
 
@@ -54,18 +88,18 @@ class Board {
     }
 
     private int evaluateRows(Mark mark, int row) {
-        int score = 0;
+        int score = Mark.isDraw();
 
         if (board[row][0] == mark) {
             if (board[row][1] == mark) {
                 if (board[row][2] == mark) {
-                    score = 100;
+                    score = Mark.isWinning();
                 }
             }
         } else if (board[row][0] == mark.opposite()) {
             if (board[row][1] == mark.opposite()) {
                 if (board[row][2] == mark.opposite()) {
-                    score = -100;
+                    score = Mark.isLosing();
                 }
             }
         }
@@ -74,18 +108,18 @@ class Board {
     }
 
     private int evaluateCols(Mark mark, int col) {
-        int score = 0;
+        int score = Mark.isDraw();
 
         if (board[0][col] == mark) {
             if (board[1][col] == mark) {
                 if (board[2][col] == mark) {
-                    score = 100;
+                    score = Mark.isWinning();
                 }
             }
         } else if (board[0][col] == mark.opposite()) {
             if (board[1][col] == mark.opposite()) {
                 if (board[2][col] == mark.opposite()) {
-                    score = -100;
+                    score = Mark.isLosing();
                 }
             }
         }
@@ -94,30 +128,30 @@ class Board {
     }
 
     private int evaluateDiags(Mark mark) {
-        int score = 0;
+        int score = Mark.isDraw();
 
         if (board[1][1] == mark) {
             if (board[0][0] == mark) {
                 if (board[2][2] == mark) {
-                    score = 100;
+                    score = Mark.isWinning();
                 }
             }
 
             if (board[0][2] == mark) {
                 if (board[2][0] == mark) {
-                    score = 100;
+                    score = Mark.isWinning();
                 }
             }
         } else if (board[1][1] == mark.opposite()) {
             if (board[0][0] == mark.opposite()) {
                 if (board[2][2] == mark.opposite()) {
-                    score = -100;
+                    score = Mark.isLosing();
                 }
             }
 
             if (board[0][2] == mark.opposite()) {
                 if (board[2][0] == mark.opposite()) {
-                    score = -100;
+                    score = Mark.isLosing();
                 }
             }
         }
