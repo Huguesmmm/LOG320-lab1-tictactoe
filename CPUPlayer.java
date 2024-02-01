@@ -56,16 +56,23 @@ public class CPUPlayer {
     // ont le même score.
 
 
+    public ArrayList<Move> getNextMoveAB(Board board) {
+        ArrayList<Move> moves = new ArrayList<>();
 
-     public ArrayList<Move> getNextMoveAB(Board board){
+        List<Move> emptyMoves = new ArrayList<>(board.getEmptyMoveMap().values());
+        int alpha = Integer.MIN_VALUE;
+        int beta = Integer.MAX_VALUE;
+        for (Move move : emptyMoves) {
+            board.play(move, maxMark);
+            int score = alphaBeta(board, maxMark.opposite(), alpha, beta);
+            board.undo(move);
+            if (score == Mark.isWinning()) {
+                moves.add(move);
+            }
+        }
 
-
-        ArrayList<Move> moves = new ArrayList<Move>();
-
-
-     return moves;
-     }
-
+        return moves;
+    }
 
 
     private int minmax(Board board, Mark mark) {
@@ -105,6 +112,48 @@ public class CPUPlayer {
                         minEval[0] = Math.min(minEval[0], eval);
                     });
             return minEval[0];
+        }
+    }
+    
+    private int alphaBeta(Board board, Mark mark, int alpha, int beta) {
+        if (board.evaluate(maxMark) == Mark.isWinning()) {
+            return Mark.isWinning();
+        }
+
+        if (board.evaluate(maxMark) == Mark.isLosing()) {
+            return Mark.isLosing();
+        }
+
+        if (board.getEmptyMoveMap().isEmpty()) {
+            return Mark.isDraw();
+        }
+
+        if (mark == maxMark) {
+            int maxEval = Integer.MIN_VALUE;
+            for (Move move : board.getEmptyMoveMap().values()) {
+                board.play(move, mark);
+                int eval = alphaBeta(board, mark.opposite(), alpha, beta);
+                board.undo(move);
+                maxEval = Math.max(maxEval, eval);
+                alpha = Math.max(alpha, eval);
+                if (beta <= alpha) {
+                    break;
+                }
+            }
+            return maxEval;
+        } else {
+            int minEval = Integer.MAX_VALUE;
+            for (Move move : board.getEmptyMoveMap().values()) {
+                board.play(move, mark);
+                int eval = alphaBeta(board, mark.opposite(), alpha, beta);
+                board.undo(move);
+                minEval = Math.min(minEval, eval);
+                beta = Math.min(beta, eval);
+                if (beta <= alpha) {
+                    break;
+                }
+            }
+            return minEval;
         }
     }
 
