@@ -53,7 +53,7 @@ public class Test {
         
         
 
-        cpu1.getNextMoveMinMax(board1);
+       // cpu1.getNextMoveMinMax(board1);
 
         for (int i = 0; i < cpu1.getNextMoveMinMax(board1).size(); i++) {
             System.out.println(cpu1.getNextMoveMinMax(board1).get(i));
@@ -63,7 +63,7 @@ public class Test {
 
     }
 
-    public static void printTicTacToeGame(Mark[][] gameBoard) {
+   /* public static void printTicTacToeGame(Mark[][] gameBoard) {
         System.out.println("[");
 
         for (int i = 0; i < gameBoard.length; i++) {
@@ -75,6 +75,6 @@ public class Test {
         }
 
         System.out.println("]");
-    }
+    }*/
     
 }

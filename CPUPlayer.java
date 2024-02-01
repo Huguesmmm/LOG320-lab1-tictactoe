@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 // IMPORTANT: Il ne faut pas changer la signature des méthodes
 // de cette classe, ni le nom de la classe.
@@ -13,11 +14,14 @@ class CPUPlayer
     // au début de votre MinMax ou Alpha Beta.
     private int numExploredNodes;
     private Mark maxMark;
+    private Mark nextMarkToPlay;
+    ArrayList<Move> lastMoves = new ArrayList<>();
 
     // Le constructeur reçoit en paramètre le
     // joueur MAX (X ou O)
     public CPUPlayer(Mark cpu){
         this.maxMark = cpu;
+        this.nextMarkToPlay = maxMark;
     }
 
     // Ne pas changer cette méthode
@@ -33,9 +37,11 @@ class CPUPlayer
         ArrayList<Move> moves = new ArrayList<Move>();
 
 
+        final int numEmptyMoves = board.getEmptyMoves().size();
+
         // get all possible moves from minmax
-        for(int i = 0; i < board.getEmptyMoves().size(); i++){
-            int eval = minmax(board, maxMark);
+        for(int i = 0; i < numEmptyMoves; i++){
+            int eval = minmax(board, numEmptyMoves, nextMarkToPlay);
             if(eval == Mark.isWinning()){
                 moves.add(board.getEmptyMoves().get(i));
             }
@@ -55,15 +61,15 @@ class CPUPlayer
     //     numExploredNodes = 0;
     // }
 
-    private int minmax(Board board, Mark mark){
+    private int minmax(Board board, int numEmptyMoves, Mark mark){
 
         // retourne l'inverse à cause de la récursion appelle l'opposé
-        if(board.evaluate(mark) == Mark.isWinning()){
-            return Mark.isLosing();
+        if(board.evaluate(maxMark) == Mark.isWinning()){
+            return Mark.isWinning();
         }
 
-        if(board.evaluate(mark) == Mark.isLosing()){
-            return Mark.isWinning();
+        if(board.evaluate(maxMark) == Mark.isLosing()){
+            return Mark.isLosing();
         }
 
         if(board.getEmptyMoves().isEmpty()){
@@ -72,23 +78,39 @@ class CPUPlayer
 
         if(mark == maxMark){
             int maxEval = -1000;
-            for(int i = 0; i < board.getEmptyMoves().size(); i++){
+            for(int i = 0; i < numEmptyMoves; i++){
                 Move moveMax = board.getEmptyMoves().get(i);
                 board.play(moveMax, mark);
                 printTicTacToeGame(board.getBoard());
-                int eval = minmax(board, mark.opposite());
-                board.undo(moveMax);
+                if (lastMoves.size() == 2) {
+                    lastMoves.remove(0);
+                }
+                lastMoves.add(moveMax);
+                int eval = minmax(board, numEmptyMoves, mark.opposite());
+
+                if (lastMoves.size() == 2)
+                    mark = mark.opposite();
+                board.undo(lastMoves);
+                lastMoves = new ArrayList<>();
                 maxEval = Math.max(maxEval, eval);
             }
             return maxEval;
         } else {
             int minEval = 1000;
-            for(int i = 0; i < board.getEmptyMoves().size(); i++){
+            for(int i = 0; i < numEmptyMoves; i++){
                 Move moveMin = board.getEmptyMoves().get(i);
                 board.play(board.getEmptyMoves().get(i), mark);
                 printTicTacToeGame(board.getBoard());
-                int eval = minmax(board, mark.opposite());
-                board.undo(moveMin);
+                if (lastMoves.size() == 2) {
+                    lastMoves.remove(0);
+                }
+                lastMoves.add(moveMin);
+                int eval = minmax(board, numEmptyMoves, mark.opposite());
+
+                if (lastMoves.size() == 2)
+                    mark = mark.opposite();
+                board.undo(lastMoves);
+                lastMoves = new ArrayList<>();
                 minEval = Math.min(minEval, eval);
             }
             return minEval;

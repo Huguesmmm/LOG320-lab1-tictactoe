@@ -27,6 +27,15 @@ class Board {
         }
     }
 
+    public Board(Mark[][] board, ArrayList<Move> emptyMoves) {
+        this.board = board;
+        this.emptyMoves = emptyMoves;
+    }
+
+    public Board(Board deepCopiedBoard) {
+        this(deepCopiedBoard.getBoard(), deepCopiedBoard.getEmptyMoves());
+    }
+
     public ArrayList<Move> getEmptyMoves() {
         return emptyMoves;
     }
@@ -49,9 +58,23 @@ class Board {
         }
     }
 
-    public void undo(Move m) {
-        board[m.getRow()][m.getCol()] = Mark.E;
-        this.emptyMoves.add(m);
+    public void playMinMax(Move m, Mark mark) {
+        board[m.getRow()][m.getCol()] = mark;
+        for (Move move : this.emptyMoves) {
+            if(move.getRow() == m.getRow() && move.getCol() == m.getCol()) {
+                this.emptyMoves.remove(move);
+                break;
+            }
+        }
+    }
+
+    public void undo(ArrayList<Move> lastMoves) {
+        for (Move lastMove : lastMoves) {
+            board[lastMove.getRow()][lastMove.getCol()] = Mark.E;
+            this.emptyMoves.add(lastMove);
+        }
+//        board[m.getRow()][m.getCol()] = Mark.E;
+//        this.emptyMoves.add(m);
     }
 
     // retourne 100 pour une victoire
