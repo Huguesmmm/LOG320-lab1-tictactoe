@@ -2,7 +2,7 @@ public class Test {
 
     public static void main(String[] args) {
         Board board1 = new Board();
-        CPUPlayer cpu1 = new CPUPlayer(Mark.X);
+        CPUPlayer cpu1 = new CPUPlayer(Mark.O);
 
 
         // supposed  to return -100
@@ -51,31 +51,33 @@ public class Test {
 
         // printTicTacToeGame(board1.getBoard());
 
+        board1.play(new Move(0, 0), Mark.X);
+        board1.play(new Move(0, 1), Mark.O);
+        board1.play(new Move(2, 1), Mark.X);
+        board1.play(new Move(0, 2), Mark.O);
+        board1.play(new Move(1, 1), Mark.X);
+        // board1.play(new Move(2, 2), Mark.O);
+
+
         // board1.play(new Move(0, 0), Mark.X);
-        // board1.play(new Move(0, 1), Mark.O);
-        // board1.play(new Move(2, 1), Mark.X);
+
         // board1.play(new Move(0, 2), Mark.O);
 
+        // board1.play(new Move(1, 1), Mark.X);
 
-        board1.play(new Move(0, 0), Mark.X);
-        // board1.play(new Move(0, 1), Mark.O);
-        board1.play(new Move(0, 2), Mark.O);
-        // board1.play(new Move(1, 0), Mark.EMPTY);
-        board1.play(new Move(1, 1), Mark.X);
-        // board1.play(new Move(1, 2), Mark.O);
-        board1.play(new Move(2, 0), Mark.X);
-        board1.play(new Move(2, 1), Mark.O);
-        board1.play(new Move(2, 2), Mark.O);
+        // board1.play(new Move(2, 0), Mark.X);
+        // board1.play(new Move(2, 1), Mark.O);
+        // board1.play(new Move(2, 2), Mark.O);
         
-
         for (int i = 0; i < cpu1.getNextMoveMinMax(board1).size(); i++) {
             System.out.println("Minmax : " + cpu1.getNextMoveMinMax(board1).get(i));
         }
+        System.out.println("Minmax : " + cpu1.getNumOfExploredNodes());
 
-        for (int i = 0; i < cpu1.getNextMoveMinMax(board1).size(); i++) {
+        for (int i = 0; i < cpu1.getNextMoveAB(board1).size(); i++) {
             System.out.println("AlphaBeta : " + cpu1.getNextMoveAB(board1).get(i));
         }
-
+        System.out.println("AlphaBeta : " + cpu1.getNumOfExploredNodes());
         // System.out.println(board1.evaluate(Mark.X));
 
     }

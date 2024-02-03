@@ -32,19 +32,25 @@ class CPUPlayer {
         ArrayList<Move> winningMoves = new ArrayList<Move>();
         ArrayList<Move> tyingMoves = new ArrayList<Move>();
 
+        numExploredNodes = 0;
+
         List<Move> emptyMoves = new ArrayList<>(board.getEmptyMoveMap().values());
-        emptyMoves.forEach(
-                move -> {
-                    board.play(move, maxMark);
-                    // printTicTacToeGame(board.getBoard());
-                    int score = minmax(board, maxMark.opposite());
-                    if (score == Mark.isWinning()) {
-                        winningMoves.add(move);
-                    } else if (score == Mark.isDraw()) {
-                        tyingMoves.add(move);
-                    }
-                    board.undo(move);
-                });
+
+        // Considérant que le joueur X est le premier joueur à jouer
+        Mark markToPlay = emptyMoves.size() % 2 == 0 ? Mark.O : Mark.X;
+
+        for (Move move : emptyMoves) {
+            board.play(move, markToPlay);
+            // printTicTacToeGame(board.getBoard());
+            numExploredNodes++;
+            int score = minmax(board, markToPlay.opposite());
+            if (score == Mark.isWinning()) {
+                winningMoves.add(move);
+            } else if (score == Mark.isDraw()) {
+                tyingMoves.add(move);
+            }
+            board.undo(move);
+        }
 
         if (!winningMoves.isEmpty())
             return winningMoves;
@@ -59,19 +65,25 @@ class CPUPlayer {
         ArrayList<Move> winningMoves = new ArrayList<Move>();
         ArrayList<Move> tyingMoves = new ArrayList<Move>();
 
+        numExploredNodes = 0;
+
         List<Move> emptyMoves = new ArrayList<>(board.getEmptyMoveMap().values());
-        emptyMoves.forEach(
-                move -> {
-                    board.play(move, maxMark);
-                    // printTicTacToeGame(board.getBoard());
-                    int score = alphaBeta(board, maxMark.opposite(), -1000, 1000);
-                    if (score == Mark.isWinning()) {
-                        winningMoves.add(move);
-                    } else if (score == Mark.isDraw()) {
-                        tyingMoves.add(move);
-                    }
-                    board.undo(move);
-                });
+
+        // Considérant que le joueur X est le premier joueur à jouer
+        Mark markToPlay = emptyMoves.size() % 2 == 0 ? Mark.O : Mark.X;
+
+        for (Move move : emptyMoves) {
+            board.play(move, markToPlay);
+            // printTicTacToeGame(board.getBoard());
+            numExploredNodes++;
+            int score = alphaBeta(board, markToPlay.opposite(), -1000, 1000);
+            if (score == Mark.isWinning()) {
+                winningMoves.add(move);
+            } else if (score == Mark.isDraw()) {
+                tyingMoves.add(move);
+            }
+            board.undo(move);
+        }
 
         if (!winningMoves.isEmpty())
             return winningMoves;
@@ -99,6 +111,7 @@ class CPUPlayer {
             List<Move> moves = new ArrayList<>(board.getEmptyMoveMap().values());
             for (Move move : moves) {
                 board.play(move, mark);
+                numExploredNodes++;
                 int eval = minmax(board, mark.opposite());
                 board.undo(move);
                 maxEval = Math.max(maxEval, eval);
@@ -109,6 +122,7 @@ class CPUPlayer {
             List<Move> moves = new ArrayList<>(board.getEmptyMoveMap().values());
             for (Move move : moves) {
                 board.play(move, mark);
+                numExploredNodes++;
                 int eval = minmax(board, mark.opposite());
                 board.undo(move);
                 minEval = Math.min(minEval, eval);
@@ -135,6 +149,7 @@ class CPUPlayer {
             List<Move> moves = new ArrayList<>(board.getEmptyMoveMap().values());
             for (Move move : moves) {
                 board.play(move, mark);
+                numExploredNodes++;
                 alpha = Math.max(alpha, alphaBeta(board, mark.opposite(), alpha, beta));
                 board.undo(move);
                 if (beta <= alpha) {
@@ -146,6 +161,7 @@ class CPUPlayer {
             List<Move> moves = new ArrayList<>(board.getEmptyMoveMap().values());
             for (Move move : moves) {
                 board.play(move, mark);
+                numExploredNodes++;
                 beta = Math.min(beta, alphaBeta(board, mark.opposite(), alpha, beta));
                 board.undo(move);
                 if (beta <= alpha) {

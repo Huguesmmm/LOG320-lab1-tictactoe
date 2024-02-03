@@ -1,0 +1,1 @@
+// Nous nous sommes basé sur la convention que le joueur X est le premier à jouer
