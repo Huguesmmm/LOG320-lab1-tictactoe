@@ -39,8 +39,8 @@ public class Test {
         // board1.play(new Move(2, 2), Mark.X);
 
         // return 0
-        board1.play(new Move(1, 1), Mark.X);
-        board1.play(new Move(2, 2), Mark.O);
+        // board1.play(new Move(1, 1), Mark.X);
+        // board1.play(new Move(1, 2), Mark.O);
         // board1.play(new Move(2, 2), Mark.X);
         // board1.play(new Move(0, 2), Mark.O);
         // board1.play(new Move(2, 1), Mark.X);
@@ -50,10 +50,30 @@ public class Test {
         // board1.play(new Move(2, 0), Mark.O);
 
         // printTicTacToeGame(board1.getBoard());
+
+        // board1.play(new Move(0, 0), Mark.X);
+        // board1.play(new Move(0, 1), Mark.O);
+        // board1.play(new Move(2, 1), Mark.X);
+        // board1.play(new Move(0, 2), Mark.O);
+
+
+        board1.play(new Move(0, 0), Mark.X);
+        // board1.play(new Move(0, 1), Mark.O);
+        board1.play(new Move(0, 2), Mark.O);
+        // board1.play(new Move(1, 0), Mark.EMPTY);
+        board1.play(new Move(1, 1), Mark.X);
+        // board1.play(new Move(1, 2), Mark.O);
+        board1.play(new Move(2, 0), Mark.X);
+        board1.play(new Move(2, 1), Mark.O);
+        board1.play(new Move(2, 2), Mark.O);
         
 
         for (int i = 0; i < cpu1.getNextMoveMinMax(board1).size(); i++) {
-            System.out.println(cpu1.getNextMoveMinMax(board1).get(i));
+            System.out.println("Minmax : " + cpu1.getNextMoveMinMax(board1).get(i));
+        }
+
+        for (int i = 0; i < cpu1.getNextMoveMinMax(board1).size(); i++) {
+            System.out.println("AlphaBeta : " + cpu1.getNextMoveAB(board1).get(i));
         }
 
         // System.out.println(board1.evaluate(Mark.X));

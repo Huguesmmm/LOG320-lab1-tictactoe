@@ -1,8 +1,5 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 // IMPORTANT: Il ne faut pas changer la signature des méthodes
 // de cette classe, ni le nom de la classe.
@@ -32,7 +29,8 @@ class CPUPlayer {
     // plusieurs coups possibles si et seuleument si plusieurs coups
     // ont le même score.
     public ArrayList<Move> getNextMoveMinMax(Board board) {
-        ArrayList<Move> moves = new ArrayList<Move>();
+        ArrayList<Move> winningMoves = new ArrayList<Move>();
+        ArrayList<Move> tyingMoves = new ArrayList<Move>();
 
         List<Move> emptyMoves = new ArrayList<>(board.getEmptyMoveMap().values());
         emptyMoves.forEach(
@@ -41,21 +39,45 @@ class CPUPlayer {
                     // printTicTacToeGame(board.getBoard());
                     int score = minmax(board, maxMark.opposite());
                     if (score == Mark.isWinning()) {
-                        moves.add(move);
+                        winningMoves.add(move);
+                    } else if (score == Mark.isDraw()) {
+                        tyingMoves.add(move);
                     }
                     board.undo(move);
                 });
 
-        return moves;
-
+        if (!winningMoves.isEmpty())
+            return winningMoves;
+        else
+            return tyingMoves;
     }
 
     // Retourne la liste des coups possibles. Cette liste contient
     // plusieurs coups possibles si et seuleument si plusieurs coups
     // ont le même score.
-    // public ArrayList<Move> getNextMoveAB(Board board){
-    // numExploredNodes = 0;
-    // }
+    public ArrayList<Move> getNextMoveAB(Board board) {
+        ArrayList<Move> winningMoves = new ArrayList<Move>();
+        ArrayList<Move> tyingMoves = new ArrayList<Move>();
+
+        List<Move> emptyMoves = new ArrayList<>(board.getEmptyMoveMap().values());
+        emptyMoves.forEach(
+                move -> {
+                    board.play(move, maxMark);
+                    // printTicTacToeGame(board.getBoard());
+                    int score = alphaBeta(board, maxMark.opposite(), -1000, 1000);
+                    if (score == Mark.isWinning()) {
+                        winningMoves.add(move);
+                    } else if (score == Mark.isDraw()) {
+                        tyingMoves.add(move);
+                    }
+                    board.undo(move);
+                });
+
+        if (!winningMoves.isEmpty())
+            return winningMoves;
+        else
+            return tyingMoves;
+    }
 
     private int minmax(Board board, Mark mark) {
 
@@ -73,27 +95,64 @@ class CPUPlayer {
         }
 
         if (mark == maxMark) {
-            final int[] maxEval = { -1000 };
+            int maxEval = -1000;
             List<Move> moves = new ArrayList<>(board.getEmptyMoveMap().values());
-            moves.forEach(
-                    move -> {
-                        board.play(move, mark);
-                        int eval = minmax(board, mark.opposite());
-                        board.undo(move);
-                        maxEval[0] = Math.max(maxEval[0], eval);
-                    });
-            return maxEval[0];
+            for (Move move : moves) {
+                board.play(move, mark);
+                int eval = minmax(board, mark.opposite());
+                board.undo(move);
+                maxEval = Math.max(maxEval, eval);
+            }
+            return maxEval;
         } else {
-            final int[] minEval = { 1000 };
+            int minEval = 1000;
             List<Move> moves = new ArrayList<>(board.getEmptyMoveMap().values());
-            moves.forEach(
-                    move -> {
-                        board.play(move, mark);
-                        int eval = minmax(board, mark.opposite());
-                        board.undo(move);
-                        minEval[0] = Math.min(minEval[0], eval);
-                    });
-            return minEval[0];
+            for (Move move : moves) {
+                board.play(move, mark);
+                int eval = minmax(board, mark.opposite());
+                board.undo(move);
+                minEval = Math.min(minEval, eval);
+            }
+            return minEval;
+        }
+    }
+
+    private int alphaBeta(Board board, Mark mark, int alpha, int beta) {
+
+        if (board.evaluate(maxMark) == Mark.isWinning()) {
+            return Mark.isWinning();
+        }
+
+        if (board.evaluate(maxMark) == Mark.isLosing()) {
+            return Mark.isLosing();
+        }
+
+        if (board.getEmptyMoveMap().isEmpty()) {
+            return Mark.isDraw();
+        }
+
+        if (mark == maxMark) {
+            List<Move> moves = new ArrayList<>(board.getEmptyMoveMap().values());
+            for (Move move : moves) {
+                board.play(move, mark);
+                alpha = Math.max(alpha, alphaBeta(board, mark.opposite(), alpha, beta));
+                board.undo(move);
+                if (beta <= alpha) {
+                    break;
+                }
+            }
+            return alpha;
+        } else {
+            List<Move> moves = new ArrayList<>(board.getEmptyMoveMap().values());
+            for (Move move : moves) {
+                board.play(move, mark);
+                beta = Math.min(beta, alphaBeta(board, mark.opposite(), alpha, beta));
+                board.undo(move);
+                if (beta <= alpha) {
+                    break;
+                }
+            }
+            return beta;
         }
     }
 
@@ -110,13 +169,5 @@ class CPUPlayer {
 
         System.out.println("]");
     }
-
-    // public String toString(Board board){
-
-    // this.getNextMoveMinMax(board) =
-    // return "";
-    // }
-
-
 
 }
